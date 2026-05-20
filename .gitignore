@@ -1,0 +1,34 @@
+# Node
+node_modules/
+dist/
+.env
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+.env/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Databases
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+
+# IDE / System
+.vscode/
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
