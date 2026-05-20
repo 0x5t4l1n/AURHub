@@ -10,7 +10,7 @@ export default function SearchBar({ onSearch, initialQuery = '' }) {
   }, [query, onSearch]);
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-xl relative">
+    <form onSubmit={handleSubmit} className="searchbar">
       <Search
         size={17}
         className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"
@@ -19,7 +19,7 @@ export default function SearchBar({ onSearch, initialQuery = '' }) {
       <input
         id="search-input"
         type="text"
-        className="input pl-11 pr-5 py-3 rounded-xl"
+        className="input input-search pl-11 pr-5 rounded-xl"
         style={{ background: 'var(--bg-secondary)', fontSize: '0.9rem' }}
         placeholder="Search packages..."
         value={query}

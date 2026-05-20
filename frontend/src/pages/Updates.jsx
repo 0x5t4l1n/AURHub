@@ -95,12 +95,10 @@ export default function Updates() {
           <div className="card overflow-hidden">
             {updates.map((u, i) => (
               <div key={`${u.source}-${u.name}`}
-                   className="flex items-center justify-between px-5 py-4 transition-colors"
+                   className="update-row"
                    style={{
                      borderBottom: i < updates.length - 1 ? '1px solid var(--border-primary)' : 'none',
                    }}
-                   onMouseEnter={(e) => e.currentTarget.style.background = 'var(--bg-card-hover)'}
-                   onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
               >
                 <div>
                   <div className="flex items-center gap-2 mb-1">
