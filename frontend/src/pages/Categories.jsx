@@ -8,14 +8,14 @@ import {
 } from 'lucide-react';
 
 const catMeta = {
-  Development: { icon: Code, color: '#3b82f6', bg: 'rgba(59,130,246,0.1)' },
-  System:      { icon: Monitor, color: '#64748b', bg: 'rgba(100,116,139,0.1)' },
-  Network:     { icon: Wifi, color: '#10b981', bg: 'rgba(16,185,129,0.1)' },
-  Multimedia:  { icon: Music, color: '#a855f7', bg: 'rgba(168,85,247,0.1)' },
-  Games:       { icon: Gamepad2, color: '#ef4444', bg: 'rgba(239,68,68,0.1)' },
-  Desktop:     { icon: LayoutDashboard, color: '#6366f1', bg: 'rgba(99,102,241,0.1)' },
-  Fonts:       { icon: Type, color: '#f59e0b', bg: 'rgba(245,158,11,0.1)' },
-  Security:    { icon: ShieldCheck, color: '#06b6d4', bg: 'rgba(6,182,212,0.1)' },
+  Development: { icon: Code, color: '#60a5fa', bg: 'rgba(96,165,250,0.08)', desc: 'Programming tools, compilers, and IDEs' },
+  System:      { icon: Monitor, color: '#94a3b8', bg: 'rgba(148,163,184,0.08)', desc: 'Core system utilities and tools' },
+  Network:     { icon: Wifi, color: '#34d399', bg: 'rgba(52,211,153,0.08)', desc: 'Networking tools, browsers, and servers' },
+  Multimedia:  { icon: Music, color: '#c084fc', bg: 'rgba(192,132,252,0.08)', desc: 'Audio, video, and image tools' },
+  Games:       { icon: Gamepad2, color: '#f87171', bg: 'rgba(248,113,113,0.08)', desc: 'Games and gaming tools' },
+  Desktop:     { icon: LayoutDashboard, color: '#818cf8', bg: 'rgba(129,140,248,0.08)', desc: 'Desktop environments and window managers' },
+  Fonts:       { icon: Type, color: '#fbbf24', bg: 'rgba(251,191,36,0.08)', desc: 'Fonts and typography' },
+  Security:    { icon: ShieldCheck, color: '#22d3ee', bg: 'rgba(34,211,238,0.08)', desc: 'Security and privacy tools' },
 };
 
 export default function Categories() {
@@ -45,68 +45,76 @@ export default function Categories() {
     finally { setLoading(false); }
   }
 
+  /* ── Category detail view ── */
   if (categoryName) {
     const meta = catMeta[categoryName] || { icon: Package, color: 'var(--accent)', bg: 'var(--accent-muted)' };
     const Icon = meta.icon;
     return (
-      <div className="animate-slide-up">
-        <button onClick={() => navigate('/categories')} className="btn btn-secondary mb-6">
-          <ArrowLeft size={15} /> Back
+      <div className="animate-slide-up flex flex-col gap-4">
+        <button onClick={() => navigate('/categories')} className="btn btn-secondary w-fit text-xs">
+          <ArrowLeft size={12} /> Back
         </button>
-        <div className="flex items-center gap-4 mb-8">
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center"
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-lg flex items-center justify-center"
                style={{ background: meta.bg, border: '1px solid var(--border-primary)' }}>
-            <Icon size={26} style={{ color: meta.color }} />
+            <Icon size={18} style={{ color: meta.color }} />
           </div>
           <div>
             <h1 className="page-title">{categoryName}</h1>
             <p className="page-subtitle">Browse popular {categoryName.toLowerCase()} packages</p>
           </div>
         </div>
-        {error && <div className="rounded-xl p-4 mb-6 text-sm" style={{ background: 'var(--red-muted)', color: 'var(--red)' }}>{error}</div>}
+        {error && <div className="rounded-lg p-3 text-xs" style={{ background: 'var(--red-muted)', color: 'var(--red)' }}>{error}</div>}
         <PackageGrid packages={packages} loading={loading} />
       </div>
     );
   }
 
+  /* ── Category list view ── */
   return (
-    <div className="animate-slide-up">
-      <div className="mb-8">
+    <div className="animate-slide-up flex flex-col gap-4">
+      <div>
         <h1 className="page-title">Categories</h1>
         <p className="page-subtitle">Explore software by type</p>
       </div>
 
-      {error && <div className="rounded-xl p-4 mb-6 text-sm" style={{ background: 'var(--red-muted)', color: 'var(--red)' }}>{error}</div>}
+      {error && <div className="rounded-lg p-3 text-xs" style={{ background: 'var(--red-muted)', color: 'var(--red)' }}>{error}</div>}
 
       {loading ? (
         <div className="cat-grid">
           {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="card p-5">
-              <div className="shimmer h-11 w-11 rounded-xl mb-4"></div>
-              <div className="shimmer h-4 w-24 mb-2"></div>
-              <div className="shimmer h-3 w-full"></div>
+            <div key={i} className="card p-3">
+              <div className="flex items-center gap-2.5">
+                <div className="shimmer w-8 h-8 rounded-md"></div>
+                <div className="flex-1">
+                  <div className="shimmer h-3 w-20 mb-1.5"></div>
+                  <div className="shimmer h-2.5 w-full"></div>
+                </div>
+              </div>
             </div>
           ))}
         </div>
       ) : (
-        <div className="cat-grid stagger">
-          {categories.map((cat) => {
-            const meta = catMeta[cat.name] || { icon: Package, color: 'var(--accent)', bg: 'var(--accent-muted)' };
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 stagger">
+          {(categories.length > 0 ? categories : Object.keys(catMeta).map(n => ({ name: n }))).map((cat) => {
+            const meta = catMeta[cat.name] || { icon: Package, color: 'var(--accent)', bg: 'var(--accent-muted)', desc: 'Explore packages' };
             const Icon = meta.icon;
             return (
               <div key={cat.name}
-                   className="card card-interactive p-6 group"
+                   className="card card-interactive p-4 group"
                    onClick={() => navigate(`/categories/${cat.name}`)}>
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110"
-                     style={{ background: meta.bg }}>
-                  <Icon size={22} style={{ color: meta.color }} />
+                <div className="flex items-start gap-3">
+                  <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 transition-transform group-hover:scale-110"
+                       style={{ background: meta.bg }}>
+                    <Icon size={16} style={{ color: meta.color }} />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-bold mb-0.5" style={{ color: 'var(--text-primary)' }}>{cat.name}</p>
+                    <p className="text-[10px] leading-snug" style={{ color: 'var(--text-tertiary)' }}>
+                      {cat.description || meta.desc}
+                    </p>
+                  </div>
                 </div>
-                <h3 className="font-semibold text-sm mb-1 transition-colors" style={{ color: 'var(--text-primary)' }}>
-                  {cat.name}
-                </h3>
-                <p className="text-xs leading-relaxed" style={{ color: 'var(--text-tertiary)' }}>
-                  {cat.description || 'Explore packages'}
-                </p>
               </div>
             );
           })}

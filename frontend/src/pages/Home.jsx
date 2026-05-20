@@ -1,21 +1,22 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Search, TrendingUp, Package, ArrowRight, Sparkles, Shield,
-  Code, Monitor, Wifi, Music, Gamepad2, LayoutDashboard, Type, ShieldCheck
+  Search, TrendingUp, Package, ArrowRight, Shield,
+  Code, Monitor, Wifi, Music, Gamepad2, LayoutDashboard, Type, ShieldCheck,
+  Download, RefreshCw, Zap
 } from 'lucide-react';
 import api from '../api/client';
 import PackageGrid from '../components/PackageGrid';
 
 const catMeta = {
-  Development: { icon: Code, color: '#3b82f6', bg: 'rgba(59,130,246,0.1)' },
-  System:      { icon: Monitor, color: '#64748b', bg: 'rgba(100,116,139,0.1)' },
-  Network:     { icon: Wifi, color: '#10b981', bg: 'rgba(16,185,129,0.1)' },
-  Multimedia:  { icon: Music, color: '#a855f7', bg: 'rgba(168,85,247,0.1)' },
-  Games:       { icon: Gamepad2, color: '#ef4444', bg: 'rgba(239,68,68,0.1)' },
-  Desktop:     { icon: LayoutDashboard, color: '#6366f1', bg: 'rgba(99,102,241,0.1)' },
-  Fonts:       { icon: Type, color: '#f59e0b', bg: 'rgba(245,158,11,0.1)' },
-  Security:    { icon: ShieldCheck, color: '#06b6d4', bg: 'rgba(6,182,212,0.1)' },
+  Development: { icon: Code, color: '#60a5fa', bg: 'rgba(96,165,250,0.08)' },
+  System:      { icon: Monitor, color: '#94a3b8', bg: 'rgba(148,163,184,0.08)' },
+  Network:     { icon: Wifi, color: '#34d399', bg: 'rgba(52,211,153,0.08)' },
+  Multimedia:  { icon: Music, color: '#c084fc', bg: 'rgba(192,132,252,0.08)' },
+  Games:       { icon: Gamepad2, color: '#f87171', bg: 'rgba(248,113,113,0.08)' },
+  Desktop:     { icon: LayoutDashboard, color: '#818cf8', bg: 'rgba(129,140,248,0.08)' },
+  Fonts:       { icon: Type, color: '#fbbf24', bg: 'rgba(251,191,36,0.08)' },
+  Security:    { icon: ShieldCheck, color: '#22d3ee', bg: 'rgba(34,211,238,0.08)' },
 };
 
 export default function Home() {
@@ -24,18 +25,21 @@ export default function Home() {
   const [featured, setFeatured] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [updateCount, setUpdateCount] = useState(0);
 
   useEffect(() => { loadData(); }, []);
 
   async function loadData() {
     setLoading(true);
     try {
-      const [catRes, featRes] = await Promise.allSettled([
+      const [catRes, featRes, updRes] = await Promise.allSettled([
         api.listCategories(),
         api.searchPackages('firefox chromium vlc', 'all'),
+        api.checkUpdates(),
       ]);
       if (catRes.status === 'fulfilled') setCategories(catRes.value.results || []);
       if (featRes.status === 'fulfilled') setFeatured((featRes.value.results || []).slice(0, 6));
+      if (updRes.status === 'fulfilled') setUpdateCount(updRes.value.count || 0);
     } catch { /* silent */ }
     finally { setLoading(false); }
   }
@@ -45,115 +49,110 @@ export default function Home() {
     if (query.trim()) navigate(`/search?q=${encodeURIComponent(query.trim())}`);
   };
 
-  return (
-    <div className="animate-slide-up">
-      {/* ════════════════ Hero ════════════════ */}
-      <section className="relative rounded-2xl overflow-hidden mb-12 p-10 md:p-14"
-               style={{
-                 background: 'linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%)',
-                 border: '1px solid var(--border-primary)'
-               }}>
-        {/* Decorative blobs */}
-        <div className="glow-ring" style={{ width: 300, height: 300, top: -100, right: -60 }}></div>
-        <div className="glow-ring" style={{ width: 200, height: 200, bottom: -80, left: -40, background: 'var(--violet)' }}></div>
+  const stats = [
+    { icon: Package, label: 'Official', value: 'Pacman', color: 'var(--accent)' },
+    { icon: TrendingUp, label: 'AUR', value: '80,000+', color: 'var(--amber)' },
+    { icon: Shield, label: 'Security', value: 'Scanner', color: 'var(--green)' },
+    { icon: RefreshCw, label: 'Updates', value: updateCount > 0 ? `${updateCount} available` : 'Up to date', color: 'var(--violet)' },
+  ];
 
-        <div className="relative z-10 max-w-xl">
-          <div className="flex items-center gap-2 mb-5">
-            <Sparkles size={16} style={{ color: 'var(--accent)' }} />
-            <span className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--accent)' }}>
-              Welcome to ArchStore
+  return (
+    <div className="animate-slide-up flex flex-col gap-5">
+      {/* ── Welcome Bar ── */}
+      <div className="card p-4 flex flex-col sm:flex-row sm:items-center gap-4"
+           style={{ borderColor: 'var(--border-glow)' }}>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <Zap size={14} style={{ color: 'var(--accent)' }} />
+            <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--accent)' }}>
+              ArchStore
             </span>
           </div>
-
-          <h1 className="text-3xl md:text-[2.5rem] font-extrabold leading-tight mb-4"
-              style={{ letterSpacing: '-0.03em' }}>
-            Discover packages for{' '}
-            <span className="gradient-text">Arch Linux</span>
+          <h1 className="text-lg font-bold leading-tight" style={{ letterSpacing: '-0.02em' }}>
+            Discover packages for <span className="gradient-text">Arch Linux</span>
           </h1>
-
-          <p className="text-base leading-relaxed mb-8" style={{ color: 'var(--text-secondary)' }}>
-            Browse, install, and manage software from official pacman repositories
-            and the AUR — all in one beautiful interface.
+          <p className="text-xs mt-1" style={{ color: 'var(--text-tertiary)' }}>
+            Search official repos and the AUR in one place.
           </p>
-
-          <form onSubmit={handleSearch} className="flex gap-3 max-w-md">
-            <div className="relative flex-1">
-              <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-tertiary)' }} />
-              <input
-                id="hero-search"
-                type="text"
-                className="input pl-11 py-3 rounded-xl"
-                placeholder="Search packages..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-            </div>
-            <button type="submit" className="btn btn-primary px-6 rounded-xl">
-              <Search size={16} />
-              <span className="hidden sm:inline">Search</span>
-            </button>
-          </form>
         </div>
-      </section>
+        <form onSubmit={handleSearch} className="flex gap-2 shrink-0 w-full sm:w-auto sm:max-w-xs">
+          <div className="relative flex-1">
+            <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-tertiary)' }} />
+            <input
+              type="text"
+              className="input pl-8 pr-3 py-1.5 text-xs rounded-lg"
+              placeholder="Search packages..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </div>
+          <button type="submit" className="btn btn-primary px-4 rounded-lg text-xs">
+            <Search size={12} /> Go
+          </button>
+        </form>
+      </div>
 
-      {/* ════════════════ Stats ════════════════ */}
-      <section className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-        {[
-          { icon: Package, label: 'Pacman Repos', value: 'Official', color: 'var(--accent)' },
-          { icon: TrendingUp, label: 'AUR Packages', value: '80,000+', color: 'var(--amber)' },
-          { icon: Shield, label: 'Security Scan', value: 'Built-in', color: 'var(--green)' },
-          { icon: Sparkles, label: 'Updates', value: 'Real-time', color: 'var(--violet)' },
-        ].map(({ icon: Icon, label, value, color }) => (
-          <div key={label} className="card p-5 text-center">
-            <Icon size={20} style={{ color, margin: '0 auto 8px' }} />
-            <p className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>{value}</p>
-            <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>{label}</p>
+      {/* ── Stats Row ── */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {stats.map(({ icon: Icon, label, value, color }) => (
+          <div key={label} className="card p-3 flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                 style={{ background: `${color}12` }}>
+              <Icon size={15} style={{ color }} />
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs font-bold truncate" style={{ color: 'var(--text-primary)' }}>{value}</p>
+              <p className="text-[10px]" style={{ color: 'var(--text-tertiary)' }}>{label}</p>
+            </div>
           </div>
         ))}
-      </section>
+      </div>
 
-      {/* ════════════════ Categories ════════════════ */}
-      <section className="mb-12">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>Browse Categories</h2>
-          <button className="btn-ghost text-xs font-semibold flex items-center gap-1"
+      {/* ── Categories ── */}
+      <section>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>Categories</h2>
+          <button className="btn-ghost text-[11px] font-semibold flex items-center gap-1"
                   style={{ color: 'var(--accent)' }}
                   onClick={() => navigate('/categories')}>
-            View all <ArrowRight size={14} />
+            View all <ArrowRight size={12} />
           </button>
         </div>
-
         <div className="cat-grid stagger">
           {(categories.length > 0 ? categories : Object.keys(catMeta).map(n => ({ name: n }))).map((cat) => {
             const meta = catMeta[cat.name] || { icon: Package, color: 'var(--accent)', bg: 'var(--accent-muted)' };
             const Icon = meta.icon;
             return (
               <div key={cat.name}
-                   className="card card-interactive p-5 group"
+                   className="card card-interactive p-3 group"
                    onClick={() => navigate(`/categories/${cat.name}`)}>
-                <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-3 transition-transform group-hover:scale-110"
-                     style={{ background: meta.bg }}>
-                  <Icon size={20} style={{ color: meta.color }} />
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0 transition-transform group-hover:scale-110"
+                       style={{ background: meta.bg }}>
+                    <Icon size={14} style={{ color: meta.color }} />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-semibold truncate" style={{ color: 'var(--text-primary)' }}>{cat.name}</p>
+                    <p className="text-[10px] truncate" style={{ color: 'var(--text-tertiary)' }}>
+                      {cat.description || 'Explore packages'}
+                    </p>
+                  </div>
                 </div>
-                <h3 className="font-semibold text-sm mb-0.5" style={{ color: 'var(--text-primary)' }}>{cat.name}</h3>
-                <p className="text-xs leading-relaxed" style={{ color: 'var(--text-tertiary)' }}>
-                  {cat.description || 'Explore packages'}
-                </p>
               </div>
             );
           })}
         </div>
       </section>
 
-      {/* ════════════════ Featured ════════════════ */}
+      {/* ── Featured Packages ── */}
       {featured.length > 0 && (
         <section>
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>Popular Packages</h2>
-            <button className="btn-ghost text-xs font-semibold flex items-center gap-1"
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>Popular Packages</h2>
+            <button className="btn-ghost text-[11px] font-semibold flex items-center gap-1"
                     style={{ color: 'var(--accent)' }}
                     onClick={() => navigate('/search?q=popular')}>
-              See more <ArrowRight size={14} />
+              See more <ArrowRight size={12} />
             </button>
           </div>
           <PackageGrid packages={featured} loading={loading} />

@@ -11,11 +11,8 @@ export default function MainLayout() {
 
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === 'light') {
-      root.classList.add('light');
-    } else {
-      root.classList.remove('light');
-    }
+    if (theme === 'light') root.classList.add('light');
+    else root.classList.remove('light');
     localStorage.setItem('archstore-theme', theme);
   }, [theme]);
 
@@ -30,7 +27,6 @@ export default function MainLayout() {
 
   return (
     <div className="app-layout">
-      {/* Mobile overlay */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 z-40 lg:hidden"
@@ -42,36 +38,27 @@ export default function MainLayout() {
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       <main className="main-content">
+        {/* Sticky Topbar */}
+        <div className="topbar">
+          <button
+            className="btn-ghost lg:hidden !p-1.5"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            aria-label="Toggle menu"
+          >
+            {sidebarOpen ? <X size={16} /> : <Menu size={16} />}
+          </button>
+
+          <div className="topbar-search">
+            <SearchBar onSearch={handleSearch} />
+          </div>
+
+          <button onClick={toggleTheme} className="theme-toggle" aria-label="Toggle theme">
+            {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
+          </button>
+        </div>
+
+        {/* Page Content */}
         <div className="content-shell">
-          {/* ── Top Bar ── */}
-          <header className="topbar">
-            {/* Mobile menu */}
-            <button
-              id="menu-toggle"
-              className="btn-ghost lg:hidden !p-2.5 rounded-xl"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              aria-label="Toggle menu"
-            >
-              {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
-
-            {/* Search */}
-            <div className="topbar-search">
-              <SearchBar onSearch={handleSearch} />
-            </div>
-
-            {/* Theme toggle */}
-            <button
-              onClick={toggleTheme}
-              className="theme-toggle"
-              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-              title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-            >
-              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
-          </header>
-
-          {/* ── Page ── */}
           <div className="page-shell animate-fade-in">
             <Outlet />
           </div>

@@ -18,17 +18,12 @@ export default function SearchPage() {
   }, [query, source]);
 
   async function performSearch(q, s) {
-    setLoading(true);
-    setError(null);
+    setLoading(true); setError(null);
     try {
       const data = await api.searchPackages(q, s);
       setResults(data.results || []);
-    } catch (err) {
-      setError(err.message);
-      setResults([]);
-    } finally {
-      setLoading(false);
-    }
+    } catch (err) { setError(err.message); setResults([]); }
+    finally { setLoading(false); }
   }
 
   const tabs = [
@@ -38,44 +33,42 @@ export default function SearchPage() {
   ];
 
   return (
-    <div className="animate-slide-up">
+    <div className="animate-slide-up flex flex-col gap-4">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="page-title">Search Results</h1>
-        <p className="page-subtitle">
-          {query ? <>Showing results for <strong style={{ color: 'var(--text-primary)' }}>"{query}"</strong></> : 'Enter a query to search packages'}
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+        <div>
+          <h1 className="page-title">Search Results</h1>
+          <p className="page-subtitle">
+            {query ? <>Results for <strong style={{ color: 'var(--text-primary)' }}>"{query}"</strong></> : 'Enter a query to search'}
+          </p>
+        </div>
+        {query && (
+          <div className="flex items-center gap-3">
+            <div className="flex p-0.5 rounded-lg" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-primary)' }}>
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setSource(tab.id)}
+                  className="px-3 py-1 text-[11px] font-semibold rounded-md transition-all"
+                  style={{
+                    background: source === tab.id ? 'var(--accent)' : 'transparent',
+                    color: source === tab.id ? '#fff' : 'var(--text-tertiary)',
+                  }}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+            <span className="flex items-center gap-1.5 text-[11px]" style={{ color: 'var(--text-tertiary)' }}>
+              <Filter size={11} /> {results.length} pkg{results.length !== 1 ? 's' : ''}
+            </span>
+          </div>
+        )}
       </div>
 
-      {query && (
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-          {/* Source tabs */}
-          <div className="flex p-1 rounded-xl" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-primary)' }}>
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setSource(tab.id)}
-                className="px-5 py-2 text-xs font-semibold rounded-lg transition-all"
-                style={{
-                  background: source === tab.id ? 'var(--accent)' : 'transparent',
-                  color: source === tab.id ? 'white' : 'var(--text-secondary)',
-                }}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-
-          <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--text-tertiary)' }}>
-            <Filter size={13} />
-            {results.length} package{results.length !== 1 ? 's' : ''}
-          </div>
-        </div>
-      )}
-
       {error && (
-        <div className="rounded-xl p-4 mb-6 text-sm font-medium"
-             style={{ background: 'var(--red-muted)', color: 'var(--red)', border: '1px solid rgba(239,68,68,0.2)' }}>
+        <div className="rounded-lg p-3 text-xs font-medium"
+             style={{ background: 'var(--red-muted)', color: 'var(--red)', border: '1px solid rgba(248,113,113,0.15)' }}>
           {error}
         </div>
       )}
@@ -83,13 +76,13 @@ export default function SearchPage() {
       {query ? (
         <PackageGrid packages={results} loading={loading} />
       ) : (
-        <div className="flex flex-col items-center justify-center py-24" style={{ color: 'var(--text-tertiary)' }}>
-          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-5"
+        <div className="flex flex-col items-center justify-center py-14" style={{ color: 'var(--text-tertiary)' }}>
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3"
                style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-primary)' }}>
-            <Search size={28} />
+            <Search size={18} />
           </div>
-          <p className="text-base font-semibold mb-1" style={{ color: 'var(--text-secondary)' }}>Start searching</p>
-          <p className="text-sm">Type a package name or keyword above</p>
+          <p className="text-sm font-medium mb-0.5" style={{ color: 'var(--text-secondary)' }}>Start searching</p>
+          <p className="text-xs">Type a package name above</p>
         </div>
       )}
     </div>

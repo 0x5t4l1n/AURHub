@@ -1,7 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import {
-  Home, Search, Package, RefreshCw, Grid3X3, Settings, X
-} from 'lucide-react';
+import { Home, Search, Package, RefreshCw, Grid3X3, Settings, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import api from '../api/client';
 
@@ -25,38 +23,35 @@ export default function Sidebar({ isOpen, onClose }) {
 
   return (
     <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
-      {/* ── Brand ── */}
-      <div className="flex items-center justify-between mb-10">
-        <NavLink to="/" className="flex items-center gap-3 no-underline" onClick={onClose}>
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+      {/* Brand */}
+      <div className="flex items-center justify-between mb-6 px-1">
+        <NavLink to="/" className="flex items-center gap-2.5 no-underline" onClick={onClose}>
+          <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
                style={{
                  background: 'linear-gradient(135deg, var(--accent), var(--violet))',
-                 boxShadow: '0 4px 14px var(--accent-glow)'
                }}>
-            <span className="text-white font-black text-lg">A</span>
+            <span className="text-white font-black text-xs">A</span>
           </div>
           <div>
-            <h1 className="text-base font-bold" style={{ color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+            <span className="text-sm font-bold block leading-tight" style={{ color: 'var(--text-primary)' }}>
               ArchStore
-            </h1>
-            <p className="text-[11px]" style={{ color: 'var(--text-tertiary)' }}>Package Manager</p>
+            </span>
+            <span className="text-[10px] leading-tight" style={{ color: 'var(--text-tertiary)' }}>
+              Package Manager
+            </span>
           </div>
         </NavLink>
-        <button
-          className="lg:hidden btn-ghost !p-1.5"
-          onClick={onClose}
-          aria-label="Close sidebar"
-        >
-          <X size={18} />
+        <button className="lg:hidden btn-ghost !p-1" onClick={onClose} aria-label="Close">
+          <X size={14} />
         </button>
       </div>
 
-      {/* ── Navigation ── */}
-      <nav className="flex flex-col gap-2 flex-1">
-        <p className="text-[10px] font-bold uppercase tracking-widest mb-1 px-4"
-           style={{ color: 'var(--text-tertiary)' }}>
-          Menu
-        </p>
+      {/* Nav */}
+      <nav className="flex flex-col gap-0.5 flex-1">
+        <span className="text-[9px] font-bold uppercase tracking-widest px-3 mb-1"
+              style={{ color: 'var(--text-tertiary)' }}>
+          Navigation
+        </span>
         {navItems.map(({ path, icon: Icon, label }) => (
           <NavLink
             key={path}
@@ -65,11 +60,11 @@ export default function Sidebar({ isOpen, onClose }) {
             className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
             onClick={onClose}
           >
-            <Icon size={18} strokeWidth={isOpen ? 2 : 1.8} />
+            <Icon size={15} strokeWidth={1.8} />
             <span>{label}</span>
             {label === 'Updates' && updateCount > 0 && (
-              <span className="ml-auto text-[11px] font-bold px-2 py-0.5 rounded-full"
-                    style={{ background: 'var(--accent)', color: 'white', minWidth: '22px', textAlign: 'center' }}>
+              <span className="ml-auto text-[10px] font-bold px-1.5 py-px rounded-full"
+                    style={{ background: 'var(--accent)', color: '#fff', minWidth: '18px', textAlign: 'center' }}>
                 {updateCount}
               </span>
             )}
@@ -77,15 +72,13 @@ export default function Sidebar({ isOpen, onClose }) {
         ))}
       </nav>
 
-      {/* ── Footer ── */}
-      <div className="pt-5 mt-4" style={{ borderTop: '1px solid var(--border-primary)' }}>
-        <div className="flex items-center gap-2 px-4 mb-2">
-          <span className="w-2 h-2 rounded-full" style={{ background: 'var(--green)' }}></span>
-          <span className="text-[11px]" style={{ color: 'var(--text-tertiary)' }}>System Ready</span>
+      {/* Footer */}
+      <div className="pt-3 mt-2 px-3" style={{ borderTop: '1px solid var(--border-primary)' }}>
+        <div className="flex items-center gap-1.5 mb-0.5">
+          <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--green)' }}></span>
+          <span className="text-[10px]" style={{ color: 'var(--text-tertiary)' }}>System Ready</span>
         </div>
-        <p className="text-[11px] px-4" style={{ color: 'var(--text-tertiary)' }}>
-          v1.0.0 · Arch Linux
-        </p>
+        <span className="text-[10px]" style={{ color: 'var(--text-tertiary)' }}>v1.0.0 · Arch Linux</span>
       </div>
     </aside>
   );
