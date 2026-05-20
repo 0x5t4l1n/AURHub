@@ -50,19 +50,20 @@ export default function Categories() {
     const meta = catMeta[categoryName] || { icon: Package, color: 'var(--accent)', bg: 'var(--accent-muted)' };
     const Icon = meta.icon;
     return (
-      <div className="animate-slide-up flex flex-col gap-4">
+      <div className="animate-slide-up flex flex-col gap-6">
         <button onClick={() => navigate('/categories')} className="btn btn-secondary w-fit text-xs">
           <ArrowLeft size={12} /> Back
         </button>
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg flex items-center justify-center"
+        <div className="card p-6 flex flex-col lg:flex-row lg:items-center gap-4">
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
                style={{ background: meta.bg, border: '1px solid var(--border-primary)' }}>
-            <Icon size={18} style={{ color: meta.color }} />
+            <Icon size={22} style={{ color: meta.color }} />
           </div>
-          <div>
+          <div className="flex-1">
             <h1 className="page-title">{categoryName}</h1>
             <p className="page-subtitle">Browse popular {categoryName.toLowerCase()} packages</p>
           </div>
+          <div className="pill">{packages.length} packages</div>
         </div>
         {error && <div className="rounded-lg p-3 text-xs" style={{ background: 'var(--red-muted)', color: 'var(--red)' }}>{error}</div>}
         <PackageGrid packages={packages} loading={loading} />
@@ -72,7 +73,7 @@ export default function Categories() {
 
   /* ── Category list view ── */
   return (
-    <div className="animate-slide-up flex flex-col gap-4">
+    <div className="animate-slide-up flex flex-col gap-6">
       <div>
         <h1 className="page-title">Categories</h1>
         <p className="page-subtitle">Explore software by type</p>
@@ -83,11 +84,11 @@ export default function Categories() {
       {loading ? (
         <div className="cat-grid">
           {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="card p-3">
-              <div className="flex items-center gap-2.5">
-                <div className="shimmer w-8 h-8 rounded-md"></div>
+            <div key={i} className="card p-4">
+              <div className="flex items-center gap-3">
+                <div className="shimmer w-10 h-10 rounded-xl"></div>
                 <div className="flex-1">
-                  <div className="shimmer h-3 w-20 mb-1.5"></div>
+                  <div className="shimmer h-3 w-28 mb-2"></div>
                   <div className="shimmer h-2.5 w-full"></div>
                 </div>
               </div>
@@ -95,22 +96,22 @@ export default function Categories() {
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 stagger">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 stagger">
           {(categories.length > 0 ? categories : Object.keys(catMeta).map(n => ({ name: n }))).map((cat) => {
             const meta = catMeta[cat.name] || { icon: Package, color: 'var(--accent)', bg: 'var(--accent-muted)', desc: 'Explore packages' };
             const Icon = meta.icon;
             return (
               <div key={cat.name}
-                   className="card card-interactive p-4 group"
+                   className="card card-interactive p-5 group"
                    onClick={() => navigate(`/categories/${cat.name}`)}>
                 <div className="flex items-start gap-3">
-                  <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 transition-transform group-hover:scale-110"
-                       style={{ background: meta.bg }}>
-                    <Icon size={16} style={{ color: meta.color }} />
+                  <div className="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110"
+                       style={{ background: meta.bg, border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <Icon size={18} style={{ color: meta.color }} />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-xs font-bold mb-0.5" style={{ color: 'var(--text-primary)' }}>{cat.name}</p>
-                    <p className="text-[10px] leading-snug" style={{ color: 'var(--text-tertiary)' }}>
+                    <p className="text-sm font-bold mb-1" style={{ color: 'var(--text-primary)' }}>{cat.name}</p>
+                    <p className="text-[11px] leading-snug" style={{ color: 'var(--text-tertiary)' }}>
                       {cat.description || meta.desc}
                     </p>
                   </div>

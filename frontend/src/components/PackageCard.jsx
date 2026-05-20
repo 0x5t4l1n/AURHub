@@ -8,23 +8,23 @@ export default function PackageCard({ pkg }) {
 
   return (
     <div
-      className="card card-interactive p-3 flex flex-col gap-2 cursor-pointer group"
+      className="card card-interactive package-card p-4 flex flex-col gap-3 cursor-pointer"
       onClick={() => navigate(`/package/${pkg.name}`)}
       role="button"
       tabIndex={0}
       onKeyDown={(e) => e.key === 'Enter' && navigate(`/package/${pkg.name}`)}
     >
       {/* Header */}
-      <div className="flex items-start justify-between gap-2">
+      <div className="flex items-start justify-between gap-2 min-w-0">
         <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-1.5">
-            <span className="font-semibold text-[13px] truncate" style={{ color: 'var(--text-primary)' }}>
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-[15px] truncate" style={{ color: 'var(--text-primary)' }}>
               {pkg.name}
             </span>
-            {pkg.installed && <CheckCircle size={11} style={{ color: 'var(--green)' }} />}
-            {pkg.out_of_date && <AlertTriangle size={11} style={{ color: 'var(--amber)' }} />}
+            {pkg.installed && <CheckCircle size={13} style={{ color: 'var(--green)' }} />}
+            {pkg.out_of_date && <AlertTriangle size={13} style={{ color: 'var(--amber)' }} />}
           </div>
-          <span className="text-[10px] font-mono" style={{ color: 'var(--text-tertiary)' }}>
+          <span className="text-[12px] font-mono" style={{ color: 'var(--text-tertiary)' }}>
             {pkg.version || '—'}
           </span>
         </div>
@@ -32,7 +32,7 @@ export default function PackageCard({ pkg }) {
       </div>
 
       {/* Description */}
-      <p className="text-[11px] leading-snug"
+      <p className="text-[13px] leading-relaxed"
          style={{
            color: pkg.description ? 'var(--text-secondary)' : 'var(--text-tertiary)',
            fontStyle: pkg.description ? 'normal' : 'italic',
@@ -40,28 +40,28 @@ export default function PackageCard({ pkg }) {
            WebkitLineClamp: 2,
            WebkitBoxOrient: 'vertical',
            overflow: 'hidden',
-           minHeight: '2em'
+           minHeight: '2.4em'
          }}>
         {pkg.description || 'No description available'}
       </p>
 
       {/* Footer */}
-      <div className="flex items-center justify-between pt-2 mt-auto"
+      <div className="flex items-center justify-between pt-3 mt-auto"
            style={{ borderTop: '1px solid var(--border-primary)' }}>
-        <div className="flex items-center gap-3 text-[10px]" style={{ color: 'var(--text-tertiary)' }}>
+        <div className="flex items-center gap-3 text-[12px]" style={{ color: 'var(--text-tertiary)' }}>
           {pkg.votes !== undefined && pkg.votes > 0 && (
             <span className="flex items-center gap-0.5">
-              <Star size={10} style={{ color: 'var(--amber)', fill: 'var(--amber)' }} /> {pkg.votes}
+              <Star size={12} style={{ color: 'var(--amber)', fill: 'var(--amber)' }} /> {pkg.votes}
             </span>
           )}
           {pkg.popularity > 0 && <span>{pkg.popularity.toFixed(1)}</span>}
         </div>
         {pkg.installed ? (
-          <span className="badge badge-installed text-[9px]">Installed</span>
+          <span className="badge badge-installed text-[10px]">Installed</span>
         ) : (
-          <span className="flex items-center gap-1 text-[10px] font-semibold"
+          <span className="flex items-center gap-1.5 text-[12px] font-semibold"
                 style={{ color: 'var(--accent)' }}>
-            <Download size={10} /> Install
+            <Download size={12} /> Install
           </span>
         )}
       </div>

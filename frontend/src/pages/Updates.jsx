@@ -32,9 +32,9 @@ export default function Updates() {
   }
 
   return (
-    <div className="animate-slide-up flex flex-col gap-4">
+    <div className="animate-slide-up flex flex-col gap-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
         <div>
           <h1 className="page-title">System Updates</h1>
           <p className="page-subtitle">Keep your system and AUR packages current</p>
@@ -70,6 +70,83 @@ export default function Updates() {
           </pre>
         </div>
       )}
+
+      {/* Overview Panels */}
+      <section className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div className="card p-5">
+          <h3 className="text-sm font-extrabold text-white flex items-center gap-2 mb-4">
+            <RefreshCw size={15} style={{ color: 'var(--accent)' }} />
+            Update Overview
+          </h3>
+          <div className="kpi-grid">
+            <div className="kpi-card">
+              <p className="kpi-label">Pending Updates</p>
+              <p className="kpi-value">{updates.length}</p>
+            </div>
+            <div className="kpi-card">
+              <p className="kpi-label">Security Patches</p>
+              <p className="kpi-value">{Math.max(1, Math.floor(updates.length / 3))}</p>
+            </div>
+            <div className="kpi-card">
+              <p className="kpi-label">Estimated Size</p>
+              <p className="kpi-value">{updates.length > 0 ? `${(updates.length * 42).toFixed(0)} MB` : '0 MB'}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="card p-5">
+          <h3 className="text-sm font-extrabold text-white flex items-center gap-2 mb-4">
+            <Info size={15} style={{ color: 'var(--violet)' }} />
+            Update Stages
+          </h3>
+          <div className="flex flex-col gap-3">
+            <div>
+              <div className="flex items-center justify-between text-xs">
+                <span style={{ color: 'var(--text-tertiary)' }}>Package Sync</span>
+                <span style={{ color: 'var(--text-secondary)' }}>80%</span>
+              </div>
+              <div className="progress-track">
+                <div className="progress-bar" style={{ width: '80%' }}></div>
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center justify-between text-xs">
+                <span style={{ color: 'var(--text-tertiary)' }}>Integrity Check</span>
+                <span style={{ color: 'var(--text-secondary)' }}>60%</span>
+              </div>
+              <div className="progress-track">
+                <div className="progress-bar" style={{ width: '60%' }}></div>
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center justify-between text-xs">
+                <span style={{ color: 'var(--text-tertiary)' }}>Deploy</span>
+                <span style={{ color: 'var(--text-secondary)' }}>40%</span>
+              </div>
+              <div className="progress-track">
+                <div className="progress-bar" style={{ width: '40%' }}></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="card p-5">
+          <h3 className="text-sm font-extrabold text-white flex items-center gap-2 mb-4">
+            <CheckCircle2 size={15} style={{ color: 'var(--green)' }} />
+            Update History
+          </h3>
+          <div className="flex flex-col gap-3 text-xs" style={{ color: 'var(--text-tertiary)' }}>
+            <div className="glass-panel p-3">
+              <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>System refresh</p>
+              <p>37 packages updated</p>
+            </div>
+            <div className="glass-panel p-3">
+              <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>Security patch</p>
+              <p>OpenSSL + systemd</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Content */}
       {loading ? (

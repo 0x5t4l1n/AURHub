@@ -78,7 +78,7 @@ export default function PackageView() {
     : 'var(--green)';
 
   return (
-    <div className="animate-slide-up max-w-3xl flex flex-col gap-4">
+    <div className="animate-slide-up flex flex-col gap-6">
       <div>
         <button onClick={() => navigate(-1)} className="btn btn-secondary mb-3"><ArrowLeft size={13} /> Back</button>
       </div>
@@ -103,11 +103,11 @@ export default function PackageView() {
       )}
 
       {/* Main Info Card */}
-      <div className="card p-5">
-        <div className="flex flex-col md:flex-row gap-5">
-          <div className="flex-1 min-w-0">
-            <div className="flex flex-wrap items-center gap-2 mb-2">
-              <h1 className="text-xl font-bold leading-tight" style={{ letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
+      <div className="card p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-8 min-w-0">
+            <div className="flex flex-wrap items-center gap-2 mb-3">
+              <h1 className="text-2xl font-bold leading-tight" style={{ letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
                 {pkg.name}
               </h1>
               <span className={`badge ${pkg.source === 'aur' ? 'badge-aur' : 'badge-pacman'}`}>
@@ -121,7 +121,7 @@ export default function PackageView() {
               )}
             </div>
 
-            <p className="text-xs leading-relaxed mb-4" style={{ color: 'var(--text-secondary)' }}>
+            <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--text-secondary)' }}>
               {pkg.description || 'No description available.'}
             </p>
 
@@ -144,7 +144,7 @@ export default function PackageView() {
           </div>
 
           {/* Action column */}
-          <div className="flex flex-col gap-2 md:w-44 shrink-0 justify-center">
+          <div className="lg:col-span-4 flex flex-col gap-2 justify-center">
             {pkg.installed ? (
               <button onClick={remove} disabled={acting} className="btn btn-danger w-full py-2">
                 <Trash2 size={13} /> Uninstall

@@ -1,12 +1,18 @@
 import { useState, useEffect } from 'react';
 import api from '../api/client';
-import { Database, Cpu, Heart, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Database, Cpu, Heart, CheckCircle2, AlertCircle, Bell, ShieldCheck, Palette } from 'lucide-react';
 
 export default function Settings() {
   const [clearing, setClearing] = useState(false);
   const [health, setHealth] = useState(null);
   const [checking, setChecking] = useState(false);
   const [msg, setMsg] = useState(null);
+  const [toggles, setToggles] = useState({
+    autoUpdates: true,
+    notifications: true,
+    securityScan: true,
+    compactMode: false,
+  });
 
   useEffect(() => { checkHealth(); }, []);
 
@@ -27,14 +33,14 @@ export default function Settings() {
   }
 
   return (
-    <div className="animate-slide-up max-w-xl">
-      <div className="mb-5">
+    <div className="animate-slide-up flex flex-col gap-6">
+      <div>
         <h1 className="page-title">Settings</h1>
         <p className="page-subtitle">Configure ArchStore preferences</p>
       </div>
 
       {msg && (
-        <div className="rounded-lg p-3 mb-4 flex items-center gap-2 text-xs font-medium"
+        <div className="rounded-lg p-3 flex items-center gap-2 text-xs font-medium"
              style={{
                background: msg.ok ? 'var(--green-muted)' : 'var(--red-muted)',
                color: msg.ok ? 'var(--green)' : 'var(--red)',
@@ -45,19 +51,19 @@ export default function Settings() {
         </div>
       )}
 
-      <div className="flex flex-col gap-4">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {/* AUR Helper */}
-        <div className="card p-4">
-          <h3 className="font-semibold text-xs mb-1 flex items-center gap-1.5" style={{ color: 'var(--text-primary)' }}>
-            <Cpu size={14} style={{ color: 'var(--accent)' }} />
+        <div className="card p-6">
+          <h3 className="font-semibold text-sm mb-2 flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+            <Cpu size={16} style={{ color: 'var(--accent)' }} />
             AUR Helper
           </h3>
-          <p className="text-[11px] mb-3" style={{ color: 'var(--text-tertiary)' }}>
+          <p className="text-[12px] mb-4" style={{ color: 'var(--text-tertiary)' }}>
             The helper tool utilized to build and install AUR packages.
           </p>
           <div className="flex gap-2">
             {['yay', 'paru'].map((t) => (
-              <div key={t} className="flex-1 p-2.5 rounded-lg text-center text-xs font-semibold transition-all cursor-default flex items-center justify-center gap-2"
+              <div key={t} className="flex-1 p-3 rounded-lg text-center text-xs font-semibold transition-all cursor-default flex items-center justify-center gap-2"
                    style={{
                      background: t === 'yay' ? 'var(--accent-muted)' : 'var(--bg-tertiary)',
                      color: t === 'yay' ? 'var(--accent)' : 'var(--text-tertiary)',
@@ -71,13 +77,83 @@ export default function Settings() {
           </div>
         </div>
 
-        {/* Cache */}
-        <div className="card p-4">
-          <h3 className="font-semibold text-xs mb-1 flex items-center gap-1.5" style={{ color: 'var(--text-primary)' }}>
-            <Database size={14} style={{ color: 'var(--accent)' }} />
+        {/* Appearance */}
+        <div className="card p-6">
+          <h3 className="font-semibold text-sm mb-2 flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+            <Palette size={16} style={{ color: 'var(--accent)' }} />
+            Appearance
+          </h3>
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold" style={{ color: 'var(--text-primary)' }}>Compact Density</p>
+                <p className="text-[11px]" style={{ color: 'var(--text-tertiary)' }}>Optimize spacing for large lists</p>
+              </div>
+              <span
+                className={`toggle ${toggles.compactMode ? 'is-on' : ''}`}
+                onClick={() => setToggles((prev) => ({ ...prev, compactMode: !prev.compactMode }))}
+              ></span>
+            </div>
+          </div>
+        </div>
+
+        {/* Notifications */}
+        <div className="card p-6">
+          <h3 className="font-semibold text-sm mb-2 flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+            <Bell size={16} style={{ color: 'var(--accent)' }} />
+            Notifications
+          </h3>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs font-semibold" style={{ color: 'var(--text-primary)' }}>Update Alerts</p>
+              <p className="text-[11px]" style={{ color: 'var(--text-tertiary)' }}>Notify when new updates are available</p>
+            </div>
+            <span
+              className={`toggle ${toggles.notifications ? 'is-on' : ''}`}
+              onClick={() => setToggles((prev) => ({ ...prev, notifications: !prev.notifications }))}
+            ></span>
+          </div>
+        </div>
+
+        {/* Security */}
+        <div className="card p-6">
+          <h3 className="font-semibold text-sm mb-2 flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+            <ShieldCheck size={16} style={{ color: 'var(--accent)' }} />
+            Security
+          </h3>
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold" style={{ color: 'var(--text-primary)' }}>PKGBUILD Scans</p>
+                <p className="text-[11px]" style={{ color: 'var(--text-tertiary)' }}>Run static analysis on AUR builds</p>
+              </div>
+              <span
+                className={`toggle ${toggles.securityScan ? 'is-on' : ''}`}
+                onClick={() => setToggles((prev) => ({ ...prev, securityScan: !prev.securityScan }))}
+              ></span>
+            </div>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold" style={{ color: 'var(--text-primary)' }}>Auto Updates</p>
+                <p className="text-[11px]" style={{ color: 'var(--text-tertiary)' }}>Apply security updates automatically</p>
+              </div>
+              <span
+                className={`toggle ${toggles.autoUpdates ? 'is-on' : ''}`}
+                onClick={() => setToggles((prev) => ({ ...prev, autoUpdates: !prev.autoUpdates }))}
+              ></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* System Controls */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        <div className="card p-6">
+          <h3 className="font-semibold text-sm mb-2 flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+            <Database size={16} style={{ color: 'var(--accent)' }} />
             Cache
           </h3>
-          <p className="text-[11px] mb-3" style={{ color: 'var(--text-tertiary)' }}>
+          <p className="text-[12px] mb-4" style={{ color: 'var(--text-tertiary)' }}>
             Search results and package metadata are cached locally to reduce API overhead.
           </p>
           <button onClick={clearCache} disabled={clearing} className="btn btn-danger text-xs px-3 py-1.5">
@@ -85,10 +161,9 @@ export default function Settings() {
           </button>
         </div>
 
-        {/* Health */}
-        <div className="card p-4">
-          <h3 className="font-semibold text-xs mb-3 flex items-center gap-1.5" style={{ color: 'var(--text-primary)' }}>
-            <AlertCircle size={14} style={{ color: 'var(--accent)' }} />
+        <div className="card p-6">
+          <h3 className="font-semibold text-sm mb-3 flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+            <AlertCircle size={16} style={{ color: 'var(--accent)' }} />
             Backend Status
           </h3>
           <div className="flex items-center justify-between p-3 rounded-lg font-mono text-[11px]"
@@ -109,15 +184,8 @@ export default function Settings() {
             )}
           </div>
         </div>
-
-        {/* Footer */}
-        <div className="text-center py-4 text-[11px] flex flex-col items-center gap-0.5" style={{ color: 'var(--text-tertiary)' }}>
-          <span className="flex items-center justify-center gap-1">
-            Made with <Heart size={10} style={{ color: 'var(--red)', fill: 'var(--red)' }} /> for Arch Linux
-          </span>
-          <span>ArchStore v1.0.0</span>
-        </div>
       </div>
+
     </div>
   );
 }
