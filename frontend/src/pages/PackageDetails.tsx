@@ -75,6 +75,19 @@ export default function PackageDetails({ packageName, onBack }: PackageDetailsPr
     </div>
   );
 
+  const ensureArray = (val: any): string[] => {
+    if (!val) return [];
+    if (Array.isArray(val)) return val;
+    if (typeof val === 'string') {
+      return val.split(/[\s,]+/).filter(Boolean);
+    }
+    return [];
+  };
+
+  const parsedLicenses = ensureArray(pkg.licenses);
+  const parsedDepends = ensureArray(pkg.depends);
+  const parsedOptDepends = ensureArray(pkg.opt_depends);
+
   return (
     <div className="p-4 space-y-4 overflow-y-auto h-full">
       {/* Header */}
@@ -123,7 +136,7 @@ export default function PackageDetails({ packageName, onBack }: PackageDetailsPr
           </div>
           {pkg.installed_version && <div className={row}><span className={sec}>Installed Version</span><span className="font-mono text-xs">{pkg.installed_version}</span></div>}
           {pkg.arch && <div className={row}><span className={sec}>Architecture</span><span className="text-xs">{pkg.arch}</span></div>}
-          {pkg.licenses && pkg.licenses.length > 0 && <div className={row}><span className={sec}>License</span><span className="text-xs">{pkg.licenses.join(', ')}</span></div>}
+          {parsedLicenses.length > 0 && <div className={row}><span className={sec}>License</span><span className="text-xs">{parsedLicenses.join(', ')}</span></div>}
           {pkg.size && <div className={row}><span className={sec}>Download Size</span><span className="text-xs">{pkg.size}</span></div>}
           {pkg.install_size && <div className={row}><span className={sec}>Installed Size</span><span className="text-xs">{pkg.install_size}</span></div>}
           {pkg.packager && <div className={row}><span className={sec}>Packager</span><span className="text-xs truncate max-w-[200px]">{pkg.packager}</span></div>}
@@ -140,13 +153,13 @@ export default function PackageDetails({ packageName, onBack }: PackageDetailsPr
         {/* Right column */}
         <div className="space-y-4">
           {/* Dependencies */}
-          {pkg.depends && pkg.depends.length > 0 && (
+          {parsedDepends.length > 0 && (
             <div className={panel}>
               <div className={`px-3 py-2 border-b font-medium text-sm ${isDark ? 'border-dark-border' : 'border-light-border'}`}>
-                Dependencies ({pkg.depends.length})
+                Dependencies ({parsedDepends.length})
               </div>
               <div className="p-3 flex flex-wrap gap-1">
-                {pkg.depends.map(dep => (
+                {parsedDepends.map(dep => (
                   <span key={dep} className={`text-xs px-1.5 py-0.5 rounded-sm ${isDark ? 'bg-dark-active text-dark-text-secondary' : 'bg-light-active text-light-text-secondary'}`}>
                     {dep}
                   </span>
@@ -156,13 +169,13 @@ export default function PackageDetails({ packageName, onBack }: PackageDetailsPr
           )}
 
           {/* Optional deps */}
-          {pkg.opt_depends && pkg.opt_depends.length > 0 && (
+          {parsedOptDepends.length > 0 && (
             <div className={panel}>
               <div className={`px-3 py-2 border-b font-medium text-sm ${isDark ? 'border-dark-border' : 'border-light-border'}`}>
-                Optional Dependencies ({pkg.opt_depends.length})
+                Optional Dependencies ({parsedOptDepends.length})
               </div>
               <div className="p-3 flex flex-wrap gap-1">
-                {pkg.opt_depends.map(dep => (
+                {parsedOptDepends.map(dep => (
                   <span key={dep} className={`text-xs px-1.5 py-0.5 rounded-sm ${isDark ? 'bg-dark-active text-dark-text-secondary' : 'bg-light-active text-light-text-secondary'}`}>
                     {dep}
                   </span>
