@@ -5,12 +5,13 @@ A lightweight package store API for Arch Linux.
 
 import sys
 import os
+from pathlib import Path
 
 # Add backend directory to path for imports
 sys.path.insert(0, os.path.dirname(__file__))
 
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -84,16 +85,25 @@ if os.path.exists(STATIC_DIR):
     if os.path.exists(assets_dir):
         app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
 
+    static_root = Path(STATIC_DIR).resolve()
+
+    def resolve_static_path(requested_path: str) -> Path:
+        candidate = (static_root / requested_path).resolve()
+        if static_root == candidate or static_root in candidate.parents:
+            return candidate
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
+
     @app.get("/{fallback_path:path}")
     async def serve_frontend(fallback_path: str):
         # Serve favicon or other root files directly if they exist
-        file_path = os.path.join(STATIC_DIR, fallback_path)
-        if fallback_path and os.path.exists(file_path) and os.path.isfile(file_path):
-            return FileResponse(file_path)
+        if fallback_path:
+            safe_path = resolve_static_path(fallback_path)
+            if safe_path.exists() and safe_path.is_file():
+                return FileResponse(str(safe_path))
         # Otherwise fallback to index.html for React SPA routing
-        index_path = os.path.join(STATIC_DIR, "index.html")
-        if os.path.exists(index_path):
-            return FileResponse(index_path)
+        index_path = static_root / "index.html"
+        if index_path.exists():
+            return FileResponse(str(index_path))
 else:
     @app.get("/")
     async def root():
