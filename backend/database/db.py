@@ -9,7 +9,19 @@ import time
 import json
 from typing import Optional
 
-DB_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "archstore.db")
+# Determine writable database path based on install directory type
+is_system_install = os.path.dirname(os.path.dirname(__file__)).startswith("/usr")
+if is_system_install:
+    xdg_data_home = os.environ.get("XDG_DATA_HOME")
+    if xdg_data_home:
+        data_dir = os.path.join(xdg_data_home, "archstore")
+    else:
+        data_dir = os.path.join(os.path.expanduser("~"), ".local", "share", "archstore")
+    os.makedirs(data_dir, exist_ok=True)
+    DB_PATH = os.path.join(data_dir, "archstore.db")
+else:
+    DB_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "archstore.db")
+
 CACHE_TTL = 900  # 15 minutes in seconds
 
 
