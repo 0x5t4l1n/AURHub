@@ -1,65 +1,103 @@
-# ArchStore — Arch Linux Package Store
+<div align="center">
 
-A classic, stable, and practical Linux desktop style package manager frontend for Arch Linux. It combines official `pacman` repositories and the Arch User Repository (AUR) into a dense, functional interface reminiscent of classic utilities like Synaptic Package Manager, Pamac, and older GNOME/XFCE applications.
+```
+ █████╗ ██████╗  ██████╗██╗  ██╗███████╗████████╗ ██████╗ ██████╗ ███████╗
+██╔══██╗██╔══██╗██╔════╝██║  ██║██╔════╝╚══██╔══╝██╔═══██╗██╔══██╗██╔════╝
+███████║██████╔╝██║     ███████║███████╗   ██║   ██║   ██║██████╔╝█████╗  
+██╔══██║██╔══██╗██║     ██╔══██║╚════██║   ██║   ██║   ██║██╔══██╗██╔══╝  
+██║  ██║██║  ██║╚██████╗██║  ██║███████║   ██║   ╚██████╔╝██║  ██║███████╗
+╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚══════╝
+```
 
-## Main Features
+**A classic, dense, and security-aware package manager frontend for Arch Linux**
 
-- **Unified Search**: Search packages across pacman repositories and the AUR simultaneously.
-- **Detailed Package Metadata**: View licenses, sizes, packager, installation dates, dependencies, and installed versions.
-- **PKGBUILD Security Scanner**: Analyzes PKGBUILD script manifests for suspicious scripts, remote code execution (curl/wget to sh), command injection, and other threats.
-- **System Updates Manager**: Dense list split into security bulletins and standard applications, supporting individual selections and upgrade execution.
-- **Category Browsing**: Explore applications by genre (Development, System, Networks, Multimedia, Games, etc.).
-- **Local SQLite Caching**: Fast indexing and pagination for package queries with a 15-minute Time-to-Live (TTL).
+[![AUR](https://img.shields.io/aur/version/archstore-git?style=flat-square&logo=arch-linux&logoColor=white&color=1793d1&label=AUR)](https://aur.archlinux.org/packages/archstore-git)
+[![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
+[![GitLab](https://img.shields.io/badge/GitLab-mirror-orange?style=flat-square&logo=gitlab)](https://gitlab.archlinux.org/5t4l1n/aurhub)
 
----
-
-## Technical Architecture
-
-### Backend (FastAPI + SQLite)
-- Safe execution of system tools (`pacman`, `yay`) utilizing `asyncio.subprocess` exec arrays (no `shell=True`) to completely eliminate command injection vectors.
-- Whitelist-based package name and search query sanitization.
-- Lightweight SQLite storage cache with auto-expiration.
-
-### Frontend (React + TypeScript + TailwindCSS v4)
-- Stable, non-trendy desktop-oriented interface with a fixed sidebar, top toolbar, main work panel, and bottom status bar.
-- Pure black dark mode (`#000000`) and clean white light mode with dense spacing, standard table layouts, and classic retro-thin scrollbars.
-- Simple rectangular borders with minimal rounding, zero modern gradients, shimmers, or floating card designs.
+</div>
 
 ---
 
-## Installation & Setup
+## Screenshots
 
-### Prerequisites
-Make sure you have `python`, `node`, `npm`, and an AUR helper (like `yay`) installed.
+### Dark Theme
+![ArchStore Dark Theme](https://github.com/user-attachments/assets/d8be372c-b9d2-43df-80c7-41e7dcf89155)
 
-### 1. Backend Setup
-Create a virtual environment, activate it, and install Python dependencies:
+### Light Theme
+![ArchStore Light Theme](https://github.com/user-attachments/assets/632cb351-993d-4efe-b9b6-2dc3741963b4)
+
+---
+
+## Features
+
+- **Unified Search** — search official repositories and the AUR at the same time
+- **Package Metadata** — licenses, sizes, packager, install dates, dependencies
+- **PKGBUILD Security Scanner** — flags suspicious scripts before you install
+- **System Updates** — split view of security bulletins and standard upgrades
+- **Category Browsing** — browse by genre: Development, System, Multimedia, Games, and more
+- **Fast Local Cache** — results are cached locally for instant pagination
+
+---
+
+## Installation
+
+### From the AUR (recommended)
+
+```bash
+yay -S archstore-git
+```
+
+Or manually:
+
+```bash
+git clone https://aur.archlinux.org/archstore-git.git
+cd archstore-git
+makepkg -si
+```
+
+### From source
+
+**Requirements:** `python 3.11+`, `node 20+`, `npm`, `yay` or `paru`
+
+**Backend**
+
 ```bash
 cd backend
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-```
-
-Start the development API server:
-```bash
 uvicorn main:app --reload --port 8000
 ```
-The backend API will run on `http://localhost:8000`.
 
-### 2. Frontend Setup
-Navigate to the frontend folder, install npm modules, and run the development server:
+**Frontend**
+
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-The frontend application will start on `http://localhost:5173`. Any calls to `/api` will be proxied to the backend automatically.
+
+The app will be available at `http://localhost:5173`.
 
 ---
 
-## Security Policy
+## Project Links
 
-1. **Command Sanitization**: Strict whitelist of `^[a-zA-Z0-9@._+-]+$` for all package names passed to shell processes.
-2. **Untrusted Scripts Isolation**: Build and PKGBUILD script generation is handled strictly through the pacman package manager database structures and standard AUR helpers (`yay`), bypassing manual root exec calls.
-3. **No Sudo Privilege Escalation without Prompt**: Installation requests call `pkexec` (standard Polkit helper) to prompt user dynamically, or run in the user's home space for user-run AUR installs.
+| | |
+|---|---|
+| AUR | [aur.archlinux.org/packages/archstore-git](https://aur.archlinux.org/packages/archstore-git) |
+| GitHub | [github.com/0x5t4l1n/AURHub](https://github.com/0x5t4l1n/AURHub) |
+| GitLab | [gitlab.archlinux.org/5t4l1n/aurhub](https://gitlab.archlinux.org/5t4l1n/aurhub) |
+
+---
+
+## License
+
+MIT — see [LICENSE](LICENSE) for full terms.
+
+---
+
+<div align="center">
+Built for Arch Linux 
+</div>
