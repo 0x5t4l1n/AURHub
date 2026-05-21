@@ -12,7 +12,7 @@
 **A classic, dense, and security-aware package manager frontend for Arch Linux**
 
 [![AUR](https://img.shields.io/aur/version/archstore-git?style=flat-square&logo=arch-linux&logoColor=white&color=1793d1&label=AUR)](https://aur.archlinux.org/packages/archstore-git)
-[![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
+[![License](https://img.shields.io/badge/license-GPL--3.0--or--later-blue?style=flat-square)](../LICENSE)
 [![GitLab](https://img.shields.io/badge/GitLab-mirror-orange?style=flat-square&logo=gitlab)](https://gitlab.archlinux.org/5t4l1n/aurhub)
 
 </div>
@@ -94,7 +94,7 @@ The app will be available at `http://localhost:5173`.
 
 ## License
 
-MIT — see [LICENSE](LICENSE) for full terms.
+GNU GPL v3.0 or later — see [LICENSE](../LICENSE) for full terms.
 
 ---
 
