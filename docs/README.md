@@ -1,13 +1,13 @@
 # ArchStore — Arch Linux Package Store
 
-A modern lightweight package manager client for Arch Linux that combines official `pacman` repositories and the Arch User Repository (AUR) into one clean, elegant Play Store-like interface.
+A classic, stable, and practical Linux desktop style package manager frontend for Arch Linux. It combines official `pacman` repositories and the Arch User Repository (AUR) into a dense, functional interface reminiscent of classic utilities like Synaptic Package Manager, Pamac, and older GNOME/XFCE applications.
 
 ## Main Features
 
 - **Unified Search**: Search packages across pacman repositories and the AUR simultaneously.
-- **Detailed Package Sheets**: View descriptions, maintainers, votes, popularity, and installed statuses.
+- **Detailed Package Metadata**: View licenses, sizes, packager, installation dates, dependencies, and installed versions.
 - **PKGBUILD Security Scanner**: Analyzes PKGBUILD script manifests for suspicious scripts, remote code execution (curl/wget to sh), command injection, and other threats.
-- **System Updates Check**: Checks for updates from both pacman sync databases and the AUR.
+- **System Updates Manager**: Dense list split into security bulletins and standard applications, supporting individual selections and upgrade execution.
 - **Category Browsing**: Explore applications by genre (Development, System, Networks, Multimedia, Games, etc.).
 - **Local SQLite Caching**: Fast indexing and pagination for package queries with a 15-minute Time-to-Live (TTL).
 
@@ -20,10 +20,10 @@ A modern lightweight package manager client for Arch Linux that combines officia
 - Whitelist-based package name and search query sanitization.
 - Lightweight SQLite storage cache with auto-expiration.
 
-### Frontend (React + Vite + TailwindCSS v4)
-- Responsive dark-mode UI inspired by Arch Linux.
-- Fixed sidebar layout collapsing on smaller device widths.
-- Shimmer skeleton loaders, micro-animations, and staggered grids.
+### Frontend (React + TypeScript + TailwindCSS v4)
+- Stable, non-trendy desktop-oriented interface with a fixed sidebar, top toolbar, main work panel, and bottom status bar.
+- Pure black dark mode (`#000000`) and clean white light mode with dense spacing, standard table layouts, and classic retro-thin scrollbars.
+- Simple rectangular borders with minimal rounding, zero modern gradients, shimmers, or floating card designs.
 
 ---
 
