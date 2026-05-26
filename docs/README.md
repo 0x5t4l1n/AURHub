@@ -11,9 +11,12 @@
 
 **A classic, dense, and security-aware package manager frontend for Arch Linux**
 
-[![AUR](https://img.shields.io/aur/version/archstore-git?style=flat-square&logo=arch-linux&logoColor=white&color=1793d1&label=AUR)](https://aur.archlinux.org/packages/archstore-git)
+[![AUR](https://img.shields.io/aur/version/archstore-git?style=flat-square\&logo=arch-linux\&logoColor=white\&color=1793d1\&label=AUR)](https://aur.archlinux.org/packages/archstore-git)
 [![License](https://img.shields.io/badge/license-GPL--3.0--or--later-blue?style=flat-square)](../LICENSE)
-[![GitLab](https://img.shields.io/badge/GitLab-mirror-orange?style=flat-square&logo=gitlab)](https://gitlab.archlinux.org/5t4l1n/aurhub)
+[![GitHub](https://img.shields.io/badge/GitHub-mirror-black?style=flat-square\&logo=github)](https://github.com/w4nn4d13/AURHub)
+[![GitLab](https://img.shields.io/badge/GitLab-mirror-orange?style=flat-square\&logo=gitlab)](https://gitlab.archlinux.org/5t4l1n/aurhub)
+[![Self-Hosted Git](https://img.shields.io/badge/Self--Hosted-Gitea-green?style=flat-square\&logo=gitea\&logoColor=white)](https://git.w4nn4d13.tech/0x5t4l1n/AURHub)
+
 
 </div>
 
