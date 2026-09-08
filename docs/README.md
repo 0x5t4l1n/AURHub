@@ -102,5 +102,5 @@ GNU GPL v3.0 or later — see [LICENSE](../LICENSE) for full terms.
 ---
 
 <div align="center">
-Built for Arch Linux 
+Built for Arch Linux
 </div>
