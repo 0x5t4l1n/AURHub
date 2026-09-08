@@ -78,17 +78,6 @@ async def search_packages(query: str, source: str = "all") -> list[dict]:
 
     results = []
 
-    if source in ("all", "pacman"):
-        pacman_task = pacman_service.search_packages(query)
-    else:
-        pacman_task = asyncio.coroutine(lambda: [])()
-
-    if source in ("all", "aur"):
-        aur_task = aur_service.search_packages(query)
-    else:
-        aur_task = asyncio.coroutine(lambda: [])()
-
-    # Run both searches concurrently
     if source == "all":
         pacman_results, aur_results = await asyncio.gather(
             pacman_service.search_packages(query),
