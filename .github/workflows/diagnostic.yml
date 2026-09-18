@@ -1,0 +1,76 @@
+name: PR Diagnostic
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  diagnose:
+    name: Diagnostic Info
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Collect diagnostic output
+        run: |
+          {
+            echo "## :mag: PR Diagnostic"
+            echo
+            echo "### :bust_in_silhouette: User ID (runner)"
+            echo '```'
+            id
+            echo '```'
+            echo
+            echo "### :bust_in_silhouette: User ID (container: ubuntu:latest)"
+            echo '```'
+            docker run --rm ubuntu:latest id
+            echo '```'
+            echo
+            echo "### :floppy_disk: Disk space (available in the Actions workspace)"
+            echo '```'
+            df -h
+            echo '```'
+            echo
+            echo "### :office: Workspace"
+            echo '```'
+            echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE"
+            echo "RUNNER_NAME=$RUNNER_NAME"
+            echo "OS=$RUNNER_OS"
+            echo '```'
+          } > diagnostic.md
+          cat diagnostic.md
+
+      - name: Post diagnostic output to PR
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            const fs = require('fs');
+            const marker = '## :mag: PR Diagnostic';
+            const body = fs.readFileSync('diagnostic.md', 'utf8');
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            for (const comment of comments) {
+              if (comment.body && comment.body.includes(marker)) {
+                await github.rest.issues.deleteComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: comment.id,
+                });
+              }
+            }
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body,
+            });
