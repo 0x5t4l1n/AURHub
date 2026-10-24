@@ -16,6 +16,8 @@ env/
 .env/
 pip-log.txt
 pip-delete-this-directory.txt
+.coverage
+coverage.xml
 
 # Databases
 *.db
