@@ -1,0 +1,7 @@
+[run]
+relative_files = True
+source = backend
+omit = backend/tests/*
+
+[xml]
+output = backend/coverage.xml
